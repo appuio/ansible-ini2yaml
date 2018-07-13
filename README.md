@@ -16,6 +16,5 @@ also allowing the default `/etc/ansible/hosts` inventory to be in YAML format.
 Dependencies
 ------------
 You may need the following dependencies:
-```
-pip install pyyaml
 
+    pip install pyyaml
