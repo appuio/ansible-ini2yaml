@@ -21,7 +21,7 @@ config.readfp(sys.stdin)
 
 inventory = {}
 
-varRegex = re.compile(" *([a-zA-Z][a-zA-Z0-9_]+)=([^\s]+)")
+varRegex = re.compile(r'([a-zA-Z][a-zA-Z0-9\_]+)=((([a-zA-Z0-9\$\%\@\.\_\-\/\\]+)|([\'\"])([\ a-zA-Z0-9\$\%\@\.\_\-\/\\]+)([\'\"])))')
 
 # Parse host variable and return corresponding YAML object
 def parse_value(value):
