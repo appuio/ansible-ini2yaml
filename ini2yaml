@@ -16,18 +16,18 @@ def literal_unicode_representer(dumper, data):
 yaml.add_representer(literal_unicode, literal_unicode_representer)
 
 config = ConfigParser.RawConfigParser(allow_no_value = True)
-config.optionxform = str 
+config.optionxform = str
 config.readfp(sys.stdin)
 
 inventory = {}
 
-varRegex = re.compile(" *([a-zA-Z][a-zA-Z0-9_]+)=(true|True|false|False|[0-9]+|'[^']+'|\"[^\"]+\")")
+varRegex = re.compile(" *([a-zA-Z][a-zA-Z0-9_]+)=('[^']+'|\"[^\"]+\"|[^ ]+)")
 
 # Parse host variable and return corresponding YAML object
 def parse_value(value):
   result = yaml.load("value: " + value)['value']
   if isinstance(result, basestring):
-    if '\\n' in result:  # Use YAML block literal for multi-line strings 
+    if '\\n' in result:  # Use YAML block literal for multi-line strings
       return literal_unicode(result.replace('\\n', '\n'))
     else:
       try:  # Unwrap nested YAML structures
