@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/appuio/ansible-ini2yaml.svg?branch=master)](https://travis-ci.org/appuio/ansible-ini2yaml)
+
 Ansible INI to YAML inventory converter
 =======================================
 
