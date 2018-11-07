@@ -22,19 +22,20 @@ config.readfp(sys.stdin)
 inventory = {}
 
 varRegex = re.compile(" *([a-zA-Z][a-zA-Z0-9_]+)=('[^']+'|\"[^\"]+\"|[^ ]+)")
+noQuotesNeededRegex = re.compile("^([-.0-9a-zA-Z]+|'[^']+'|\"[^\"]+\")$")
 
 # Parse host variable and return corresponding YAML object
 def parse_value(value):
-  if ":" in value and not (value.startswith("'") or value.startswith('"')):
-    result = yaml.load("value: \"" + value + "\"")['value']
+  if noQuotesNeededRegex.match(value):  # Integers, booleans and quoted strings strings must not be quoted
+    result = yaml.load('value: ' + value)['value']
   else:
-    result = yaml.load("value: " + value)['value']
+    result = yaml.load('value: "' + value + '"')['value']
   if isinstance(result, basestring):
     if '\\n' in result:  # Use YAML block literal for multi-line strings
       return literal_unicode(result.replace('\\n', '\n'))
     else:
       try:  # Unwrap nested YAML structures
-        new_result = yaml.load("value: " + result)['value']
+        new_result = yaml.load('value: ' + result)['value']
         if isinstance(new_result, list) or isinstance(new_result, dict):
           result = new_result
       except:
