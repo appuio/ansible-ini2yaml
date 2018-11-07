@@ -25,7 +25,10 @@ varRegex = re.compile(" *([a-zA-Z][a-zA-Z0-9_]+)=('[^']+'|\"[^\"]+\"|[^ ]+)")
 
 # Parse host variable and return corresponding YAML object
 def parse_value(value):
-  result = yaml.load("value: " + value)['value']
+  if ":" in value and not (value.startswith("'") or value.startswith('"')):
+    result = yaml.load("value: \"" + value + "\"")['value']
+  else:
+    result = yaml.load("value: " + value)['value']
   if isinstance(result, basestring):
     if '\\n' in result:  # Use YAML block literal for multi-line strings
       return literal_unicode(result.replace('\\n', '\n'))
