@@ -21,7 +21,7 @@ config.readfp(sys.stdin)
 
 inventory = {}
 
-varRegex = re.compile(" *([a-zA-Z][a-zA-Z0-9_]+)=('[^']+'|\"[^\"]+\"|[^ ]+)")
+varRegex = re.compile("[\t ]*([a-zA-Z][a-zA-Z0-9_]+)=('[^']+'|\"[^\"]+\"|[^ ]+)")
 noQuotesNeededRegex = re.compile("^([-.0-9a-zA-Z]+|'[^']+'|\"[^\"]+\")$")
 
 # Parse host variable and return corresponding YAML object
@@ -52,7 +52,7 @@ for section in config.sections():
         value = name + '=' + value
       else:
         value = name
-      host = value.split(' ', 1)
+      host = re.split(' |\t', value, 1)
       hostname = host[0]
       hostvars = host[1] if len(host) > 1 else ''
       hostvars = varRegex.findall(hostvars)
