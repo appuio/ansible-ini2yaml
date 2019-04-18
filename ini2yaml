@@ -49,7 +49,8 @@ for section in config.sections():
   if len(group) == 1:  # section contains host group
     for name, value in config.items(section):
       if value:
-        value = name + '=' + value
+        delimiter = ':' if name.find('[') else '='  # adding a group of hosts e.g. web[1:5].example.com
+        value = name + delimiter + value
       else:
         value = name
       host = re.split(' |\t', value, 1)
