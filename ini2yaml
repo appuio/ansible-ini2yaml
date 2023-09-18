@@ -55,9 +55,14 @@ for section in config.sections():
         value = parse_value(hostvar[1])
         inventory.setdefault('all', {}).setdefault('children', {}).setdefault(group[0], {}).setdefault('hosts', {})[hostname][hostvar[0]] = value
   elif group[1] == 'vars':  # section contains group vars
+    # Check for all:vars, doesn't need to be under all => children
     for name, value in config.items(section):
       value = parse_value(value)
-      inventory.setdefault('all', {}).setdefault('children', {}).setdefault(group[0], {}).setdefault('vars', {})[name] = value
+      # Check for all:vars, doesn't need to be under all => children
+      if group[0] == 'all':
+        inventory.setdefault(group[0], {}).setdefault('vars', {})[name] = value
+      else:
+        inventory.setdefault('all', {}).setdefault('children', {}).setdefault(group[0], {}).setdefault('vars', {})[name] = value
   elif group[1] == 'children':  # section contains group of groups
     for name, value in config.items(section):
       inventory.setdefault('all', {}).setdefault('children', {}).setdefault(group[0], {}).setdefault('children', {})[name] = {}
